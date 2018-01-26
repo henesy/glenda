@@ -8,6 +8,7 @@ import (
 	"os/signal"
 	"syscall"
 	"github.com/bwmarrin/discordgo"
+	"bitbucket.org/henesy/glenda/x/mux"
 )
 
 const Version = "v0.1.0-alpha"
@@ -73,6 +74,10 @@ func main() {
 		log.Printf("error opening connection to Discord, %s\n", err)
 		os.Exit(1)
 	}
+
+	go mux.Listener()
+
+	Session.UpdateStatus(0, "with #cat-v")
 
 	// Wait for a CTRL-C
 	log.Printf(`Now running. Press CTRL-C to exit.`)

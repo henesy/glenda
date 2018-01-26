@@ -5,10 +5,9 @@ library.
 
 ### Installing
 
-Use go get to download the repository into your Go work environment.
-
 ```
 go get github.com/bwmarrin/discordgo
+go get github.com/SlyMarbo/rss
 ```
 
 ### Usage

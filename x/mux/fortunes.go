@@ -45,4 +45,3 @@ func (m *Mux) Fortunes(ds *discordgo.Session, dm *discordgo.Message, ctx *Contex
 
 	return
 }
-

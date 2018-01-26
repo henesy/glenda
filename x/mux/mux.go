@@ -46,7 +46,7 @@ type Mux struct {
 // New returns a new Discord message route mux
 func New() *Mux {
 	m := &Mux{}
-	m.Prefix = "-dg "
+	m.Prefix = "!g "
 	return m
 }
 
@@ -62,7 +62,7 @@ func (m *Mux) Route(pattern, desc string, cb HandlerFunc) (*Route, error) {
 	return &r, nil
 }
 
-// FuzzyMatch attepts to find the best route match for a givin message.
+// FuzzyMatch attepts to find the best route match for a given message.
 func (m *Mux) FuzzyMatch(msg string) (*Route, []string) {
 
 	// Tokenize the msg string into a slice of words

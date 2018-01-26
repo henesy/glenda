@@ -1,8 +1,5 @@
-// Declare this file to be part of the main package so it can be compiled into
-// an executable.
 package main
 
-// Import all Go packages required for this file.
 import (
 	"flag"
 	"fmt"
@@ -10,12 +7,10 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-
 	"github.com/bwmarrin/discordgo"
 )
 
-// Version is a constant that stores the Disgord version information.
-const Version = "v0.0.0-alpha"
+const Version = "v0.1.0-alpha"
 
 // Session is declared in the global space so it can be easily used
 // throughout this program.
@@ -27,6 +22,7 @@ var Session, _ = discordgo.New()
 func init() {
 
 	// Discord Authentication Token
+	// Have to prefix "Bot [Token Here]" or 401 Forbidden
 	Session.Token = os.Getenv("DG_TOKEN")
 	if Session.Token == "" {
 		flag.StringVar(&Session.Token, "t", "", "Discord Authentication Token")
@@ -89,3 +85,4 @@ func main() {
 
 	// Exit Normally.
 }
+

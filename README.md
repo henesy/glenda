@@ -13,9 +13,9 @@ go get github.com/bwmarrin/discordgo
 
 ### Usage
 ```
-cd $GOPATH/src/github.com/bwmarrin/disgord
+cd $GOPATH/src/bitbucket.org/henesy/glenda
 go build
-./disgord -t 'Bot BOT_AUTH_TOKEN'
+./glenda -t 'Bot BOT_AUTH_TOKEN'
 ```
 
 ## Documentation

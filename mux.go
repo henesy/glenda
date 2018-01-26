@@ -17,4 +17,7 @@ func init() {
 
 	// Register the build-in help command.
 	Router.Route("help", "Display this message.", Router.Help)
+
+	Router.Route("fortune", "Display fortunes.", Router.Fortunes)
 }
+

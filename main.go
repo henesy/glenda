@@ -9,6 +9,7 @@ import (
 	"syscall"
 	"github.com/bwmarrin/discordgo"
 	"bitbucket.org/henesy/glenda/x/mux"
+sc	"strconv"
 )
 
 const Version = "v0.1.0-alpha"
@@ -75,12 +76,15 @@ func main() {
 		os.Exit(1)
 	}
 
+	// Init Mux daemons
 	go mux.Listener()
+	go mux.CommMux()
+	go CommMux()
 
 	Session.UpdateStatus(0, "with #cat-v")
 
 	// Wait for a CTRL-C
-	log.Printf(`Now running. Press CTRL-C to exit.`)
+	log.Printf(`Now running on PID ` + sc.Itoa(os.Getpid()) + `. Press CTRL-C to exit.`)
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc

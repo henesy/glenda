@@ -18,6 +18,11 @@ func init() {
 	// Register the build-in help command.
 	Router.Route("help", "Display this message.", Router.Help)
 
-	Router.Route("fortune", "Display fortunes.", Router.Fortunes)
+	Router.Route("fortune", "Display fortunes. Bonus files are (theo troll rsc bullshit terry rob).", Router.Fortunes)
+
+	Router.Route("dump", "Dump config to file.", Router.Dump)
+
+	Router.Route("about", "General information about the bot.", Router.About)
+
 }
 

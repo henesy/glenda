@@ -26,9 +26,6 @@ func Listener() {
 	}
 }
 
-// Load JSON Configuration File (move me?)
-
-
 /* Commands for Mux */
 
 // Print last commit or 
@@ -43,3 +40,4 @@ func (m *Mux) Commits(ds *discordgo.Session, dm *discordgo.Message, ctx *Context
 
 	return
 }
+

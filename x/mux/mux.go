@@ -46,7 +46,7 @@ type Mux struct {
 // New returns a new Discord message route mux
 func New() *Mux {
 	m := &Mux{}
-	m.Prefix = "!g "
+	m.Prefix = "g!"
 	return m
 }
 
@@ -200,3 +200,4 @@ func (m *Mux) OnMessageCreate(ds *discordgo.Session, mc *discordgo.MessageCreate
 	}
 
 }
+

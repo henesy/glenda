@@ -27,3 +27,4 @@ just learning the DiscordGo API and easily integrated into their own projects.
 Some inspiration was taken from the [chi](https://github.com/go-chi/chi) 
 and [httprouter](https://github.com/julienschmidt/httprouter) routers when 
 creating dgMux.
+

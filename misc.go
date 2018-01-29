@@ -3,7 +3,7 @@ package main
 // Miscellaneous utilities for communicating with Mux
 
 import (
-	"bitbucket.org/henesy/glenda/x/mux"
+//	"bitbucket.org/henesy/glenda/x/mux"
 	"time"
 )
 
@@ -11,15 +11,6 @@ import (
 func CommMux() {
 	for {
 		select {
-		case r := <-mux.GlendaChan:
-			if r == "dump" {
-				err := Config.Write()
-				if err != nil {
-					mux.MuxChan <- "dump failed"
-				} else {
-					mux.MuxChan <- "dump ok"
-				}
-			}
 		default:
 		}
 

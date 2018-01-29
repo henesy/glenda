@@ -80,7 +80,7 @@ func main() {
 	go mux.Listener()
 	go mux.CommMux()
 	go CommMux()
-	Config.Init()
+	go mux.Config.Init()
 
 	Session.UpdateStatus(0, "with #cat-v")
 

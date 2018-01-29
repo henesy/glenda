@@ -24,14 +24,6 @@ func CommMux() {
 	// Listen for signals till death do us part
 	for {
 		select {
-		case r := <-MuxChan:
-			if r == "dump ok" {
-				dumpChan <- "Ok."
-			} else if r == "dump failed" {
-				dumpChan <- "Dump Failed. Check Logs."
-			}
-		case <-dumpChan:
-			GlendaChan <- "dump"
 		default:
 		}
 
@@ -43,8 +35,12 @@ func CommMux() {
 func (m *Mux) Dump(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 	resp := ""
 
-	dumpChan <- ""
-	resp += <-dumpChan
+	err := Config.Write()
+	if err != nil {
+		resp += "Dump failed. Check logs."
+	} else {
+		resp += "Ok."
+	}
 
 	resp += "\n"
 

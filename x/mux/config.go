@@ -1,4 +1,4 @@
-package main
+package mux
 
 // General configuration utilities for Glenda
 
@@ -7,11 +7,12 @@ import (
 	"os"
 	"fmt"
 	"strings"
+	"github.com/SlyMarbo/rss"
 )
 
 // Stores config for current state
 type Configuration struct {
-	LastChange string
+	Feeds	[]rss.Feed
 }
 
 // Initializes current config (called once at start) ­ just .Read()?
@@ -21,15 +22,15 @@ func (c *Configuration) Init() {
 
 // Writes current config
 func (c *Configuration) Write() (rerr error) {
-	WRT: 
+	WRT:
 	rerr = nil
 	f, err := os.OpenFile("./cfg/glenda.cfg", os.O_RDWR, 0666)
 	defer f.Close()
 	if err != nil {
 		if strings.Contains(err.Error(), "no such file or directory") {
+			// danger: this can go infinite
 			Config.Setup()
 			goto WRT
-			return
 		} else {
 			fmt.Println("Error opening config (w), see: config.go")
 			fmt.Printf("%s\n", err)
@@ -50,21 +51,30 @@ func (c *Configuration) Write() (rerr error) {
 
 // Reads current config into memory
 func (c *Configuration) Read() (rerr error) {
+	RD:
 	f, err := os.Open("./cfg/glenda.cfg")
 	if err != nil {
-		fmt.Println("Error opening config (r), see: config.go")
-		fmt.Printf("%s\n", err)
-		rerr = err
+		if strings.Contains(err.Error(), "no such file or directory") {
+			// danger: this can go infinite
+			Config.Setup()
+			goto RD
+		} else {
+			fmt.Println("Error opening config (r), see: config.go")
+			fmt.Printf("%s\n", err)
+			rerr = err
+		}
+	} else {
+		d := json.NewDecoder(f)
+		err = d.Decode(&Config)
+		if err != nil {
+			fmt.Println("Error reading config, see: config.go")
+			fmt.Printf("%s\n", err)
+			rerr = err
+			Config.Write()
+			goto RD
+		}
 	}
-	
-	d := json.NewDecoder(f)
-	err = d.Decode(&Config)
-	if err != nil {
-		fmt.Println("Error reading config, see: config.go")
-		fmt.Printf("%s\n", err)
-		rerr = err
-	}
-	
+
 	return
 }
 

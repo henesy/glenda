@@ -19,7 +19,7 @@ func (m *Mux) Man(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 		"Section (1) for general publicly accessible commands.",
 		"Section (2) for library functions, including system calls.",
 		"Section (3) for kernel devices (accessed via bind (1)).",
-		"Section (4) for file services (accessed via mount ).",
+		"Section (4) for file services (accessed via mount).",
 		"Section (5) for the Plan 9 file protocol.",
 		"Section (6) for file formats.",
 		"Section (7) for databases and database access programs.",
@@ -77,6 +77,11 @@ func (m *Mux) Man(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 			resp += "No matching manual page(s) found."
 		}
 		
+	} else if len(ctx.Fields) == 1 {
+		resp += ".\n"
+		for i:=1; i < 9; i++ {
+			resp += desc[i-1] + "\n"
+		}
 	} else {
 		resp += "No op. Please use the 'man 3 srv' format or 'man srv' format."
 	}

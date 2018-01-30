@@ -45,7 +45,7 @@ func (c *Configuration) Write() (rerr error) {
 			rerr = err
 		}
 	}
-	
+
 	return
 }
 
@@ -53,6 +53,7 @@ func (c *Configuration) Write() (rerr error) {
 func (c *Configuration) Read() (rerr error) {
 	RD:
 	f, err := os.Open("./cfg/glenda.cfg")
+	defer f.Close()
 	if err != nil {
 		if strings.Contains(err.Error(), "no such file or directory") {
 			// danger: this can go infinite
@@ -71,7 +72,6 @@ func (c *Configuration) Read() (rerr error) {
 			fmt.Printf("%s\n", err)
 			rerr = err
 			Config.Write()
-			goto RD
 		}
 	}
 

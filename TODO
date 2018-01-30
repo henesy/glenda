@@ -1,3 +1,4 @@
+Features
 * g!sum acid(1)
 * g!man acid(1) or g!man 1 acid
 * rss feed subscription (tracking commits)
@@ -5,3 +6,7 @@
 * 9front/plan9 source searching
 * various cat-v fetches (harmful, page search [get lucky])
 * Auto-propaganda processing for images (Black and White -> (9)-ify)
+
+--
+Problems
+* Move feed caching to another file than the .cfg (seriously this is a fcking mess)

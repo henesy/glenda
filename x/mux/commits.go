@@ -64,8 +64,6 @@ func (m *Mux) Last(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 		resp += "**" + Config.Feeds[id].Title + ": **" + "\n"
 		resp += Config.Feeds[id].Items[0].Date.String() + "\n\n"
 		resp += "`" + Config.Feeds[id].Items[0].Title + "`" + "\n"
-		//resp += Config.Feeds[id].Items[0].Summary + "\n"
-		//resp += Config.Feeds[id].Items[0].Content + "\n"
 		resp += "\n" + Config.Feeds[id].Items[0].Link + "\n"
 		Config.Feeds[id].Items[0].Read = true
 		fmt.Println("Last-ing notification: ", Config.Feeds[id].Items[0])

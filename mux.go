@@ -29,6 +29,8 @@ func init() {
 	Router.Route("dump", "Dump config to file.", Router.Dump)
 	
 	Router.Route("subscribe", "Subscribe current channel to a given feed id.", Router.Subscribe)
+	
+	Router.Route("man", "Display a given Plan 9 manual page (From 9front for now).", Router.Man)
 
 	Router.Route("about", "General information about the bot.", Router.About)
 	

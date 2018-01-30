@@ -1,5 +1,8 @@
 Features
 * g!sum acid(1)
+* Support for acid(1) in g!man
+* Search man blocks other than 9front's
+* Cookie distribution algorithm
 * Server greeting
 * 9front/plan9 source searching
 * various cat-v fetches (harmful, page search [get lucky])
@@ -8,3 +11,4 @@ Features
 --
 Problems
 * Move feed caching to another file than the .cfg (seriously this is a fcking mess)
+

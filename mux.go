@@ -20,13 +20,15 @@ func init() {
 
 	Router.Route("fortune", "Display fortunes. Bonus files are (theo troll rsc bullshit terry rob).", Router.Fortunes)
 	
-	Router.Route("subscribe", "Subscribe to an RSS feed.", Router.Subscribe)
+	Router.Route("add", "Subscribe to an RSS feed.", Router.Add)
 	
 	Router.Route("list", "List RSS feeds Glenda is subscribed to by id.", Router.List)
 	
 	Router.Route("last", "Show the last commit for a given RSS feed by id.", Router.Last)
 
 	Router.Route("dump", "Dump config to file.", Router.Dump)
+	
+	Router.Route("subscribe", "Subscribe current channel to a given feed id.", Router.Subscribe)
 
 	Router.Route("about", "General information about the bot.", Router.About)
 	

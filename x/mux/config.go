@@ -8,16 +8,25 @@ import (
 	"fmt"
 	"strings"
 	"github.com/SlyMarbo/rss"
+	"github.com/bwmarrin/discordgo"
 )
+
+// Stores subscription information for channels related to RSS feeds
+type Subscription struct {
+	ChanID	string
+	SubID	int
+}
 
 // Stores config for current state
 type Configuration struct {
 	Feeds	[]rss.Feed
+	Subs		[]Subscription
 }
 
 // Initializes current config (called once at start) ­ just .Read()?
-func (c *Configuration) Init() {
+func (c *Configuration) Init(s *discordgo.Session) {
 	c.Read()
+	Session = s
 }
 
 // Writes current config
@@ -95,4 +104,4 @@ func (c *Configuration) Setup() {
 
 // Global variables are bad
 var Config Configuration
-
+var Session *discordgo.Session

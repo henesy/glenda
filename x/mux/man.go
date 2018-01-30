@@ -15,6 +15,15 @@ import (
 func (m *Mux) Man(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 	resp := "\n"
 	var err error 
+	var desc []string = []string{
+		"Section (1) for general publicly accessible commands.",
+		"Section (2) for library functions, including system calls.",
+		"Section (3) for kernel devices (accessed via bind (1)).",
+		"Section (4) for file services (accessed via mount ).",
+		"Section (5) for the Plan 9 file protocol.",
+		"Section (6) for file formats.",
+		"Section (7) for databases and database access programs.",
+		"Section (8) for things related to administering Plan 9."}
 	
 	page := ""
 	section := ""
@@ -56,7 +65,7 @@ func (m *Mux) Man(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 			} else {
 				if !any {
 					any = true
-					resp += ".\n"
+					resp += desc[i-1] + "\n"
 				}
 				resp += string(url) + "\n"
 			}

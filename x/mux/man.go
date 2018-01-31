@@ -33,9 +33,14 @@ func (m *Mux) Man(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 		page += ctx.Fields[len(ctx.Fields)-1]
 	
 		// Should allow selection of manual categories beyond 9front
-		url := "http://man.cat-v.org/9front/" + section + "/" + page
+		url := "http://man.postnix.us/9front/" + section + "/" + page
 		
 		page, err := http.Get(url)
+		if err != nil {
+			fmt.Println("Error fetching URL, see: x/mux/man.go")
+			resp += "Error fetching URL. Is man.postnix.us up?"
+			goto URL
+		}
 		defer page.Body.Close()
 		body, err := ioutil.ReadAll(page.Body)
 		
@@ -54,7 +59,7 @@ func (m *Mux) Man(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 		
 		for i:=1; i < 9; i++ {
 			// Should allow selection of manual categories beyond 9front
-			url := "http://man.cat-v.org/9front/" + strconv.Itoa(i) + "/" + page
+			url := "http://man.postnix.us/9front/" + strconv.Itoa(i) + "/" + page
 			
 			page, err := http.Get(url)
 			defer page.Body.Close()
@@ -86,6 +91,7 @@ func (m *Mux) Man(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 		resp += "No op. Please use the 'man 3 srv' format or 'man srv' format."
 	}
 
+	URL:
 	resp += "\n"
 
 	_, err = ds.ChannelMessageSend(dm.ChannelID, resp)

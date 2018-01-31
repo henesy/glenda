@@ -102,7 +102,10 @@ func (m *Mux) Add(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 	fmt.Println("Proposed subscribe for: ", url)
 	
 	for _, v := range Config.Feeds {
-		if strings.Contains(url, v.Link) {
+		// this is bad matching, can't have two bitbucket url's?
+		if strings.Contains(url, v.UpdateURL) {
+			//fmt.Println(url)
+			//fmt.Println(v.Link)
 			resp += "Denied! Feed already subscribed to."
 			resp += "```\n"
 			ds.ChannelMessageSend(dm.ChannelID, resp)

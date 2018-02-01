@@ -1,4 +1,5 @@
 Features
+** Rework feed handling (don't cache feed in cfg? might be static not able to expand)
 * g!sum acid(1)
 * Support for acid(1) in g!man
 * Search man blocks other than 9front's

@@ -14,9 +14,9 @@ import (
 // Listen on the rss feed
 func Listener() {
 	for {
-		for p, feed := range Config.Feeds {
-			fmt.Print("Updating feed: ", feed.Title, "\n")
-			err := feed.Update()
+		for p, _ := range Config.Feeds {
+			fmt.Print("Updating feed: ", Config.Feeds[p].Title, "\n")
+			err := Config.Feeds[p].Update()
 
 			if err != nil {
 				fmt.Println("Error in updating RSS feed, see: x/mux/commits.go")
@@ -24,9 +24,9 @@ func Listener() {
 			} else {
 				Notify(p)
 			}
-			time.Sleep(10 * time.Minute)
+			time.Sleep(1 * time.Minute)
 		}
-		time.Sleep(10 * time.Minute)
+		time.Sleep(1 * time.Minute)
 	}
 }
 
@@ -43,6 +43,7 @@ func Notify(id int) {
 		resp += "\n"
 		
 		// Loop through subbed chans and post notification message
+		fmt.Println("Looping through subs to notify...")
 		for _, v := range Config.Subs {
 			if v.SubID == id {
 				Session.ChannelMessageSend(v.ChanID, resp)
@@ -50,6 +51,9 @@ func Notify(id int) {
 			time.Sleep(10 * time.Millisecond)
 		}
 	}
+	fmt.Println("No new notifys for ", Config.Feeds[id].UpdateURL)
+	fmt.Println(Config.Feeds[id].Items[0])
+	fmt.Println(Config.Feeds[id].Items[len(Config.Feeds[id].Items)-1])
 }
 
 

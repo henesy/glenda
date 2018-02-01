@@ -32,6 +32,10 @@ func Listener() {
 
 // Notify subscribed channels to subscribed feeds
 func Notify(id int) {
+	str := Config.Feeds[id].UpdateURL
+	feed, _ := rss.Fetch(str)
+	Config.Feeds[id] = *feed
+
 	if !Config.Feeds[id].Items[0].Read {
 		resp := ".\n"
 

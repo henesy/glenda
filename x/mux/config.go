@@ -27,6 +27,7 @@ type Configuration struct {
 func (c *Configuration) Init(s *discordgo.Session) {
 	c.Read()
 	Session = s
+	go Listener()
 }
 
 // Writes current config

@@ -15,14 +15,27 @@ import (
 func Listener() {
 	for {
 		for p, _ := range Config.Feeds {
-			fmt.Print("Updating feed: ", Config.Feeds[p].Title, "\n")
-			err := Config.Feeds[p].Update()
+			fmt.Print("Updating feed: ", Config.Feeds[p].Feed.Title, "\n")
+			err := Config.Feeds[p].Feed.Update()
 
 			if err != nil {
 				fmt.Println("Error in updating RSS feed, see: x/mux/commits.go")
 				fmt.Printf("%s\n\n", err)
 			} else {
-				Notify(p)
+				additem := true
+				for j, _ := range Config.Feeds[p].Recent {
+					if Config.Feeds[p].Recent[j] == Config.Feeds[p].Feed.Items[0].Title {
+						fmt.Println("Checking Recent ", j, " against ", Config.Feeds[p].Feed.Items[0].Title)
+						additem = false
+					}
+				}
+				if additem {
+					// x y z → x y z 0 → y z 0
+					Config.Feeds[p].Recent = append(Config.Feeds[p].Recent, Config.Feeds[p].Feed.Items[0].Title)
+					Config.Feeds[p].Recent = Config.Feeds[p].Recent[1:]
+					break
+					Notify(p)
+				}
 			}
 			time.Sleep(1 * time.Minute)
 		}
@@ -32,32 +45,31 @@ func Listener() {
 
 // Notify subscribed channels to subscribed feeds
 func Notify(id int) {
-	str := Config.Feeds[id].UpdateURL
+	// maybe only do at init step?
+	str := Config.Feeds[id].Feed.UpdateURL
 	feed, _ := rss.Fetch(str)
-	Config.Feeds[id] = *feed
+	Config.Feeds[id].Feed = *feed
 
-	if !Config.Feeds[id].Items[0].Read {
-		resp := ".\n"
-
-		resp += "**" + Config.Feeds[id].Title + ": **" + "\n"
-		resp += Config.Feeds[id].Items[0].Date.String() + "\n\n"
-		resp += "`" + Config.Feeds[id].Items[0].Title + "`" + "\n"
-		resp += "\n" + Config.Feeds[id].Items[0].Link + "\n"
-		Config.Feeds[id].Items[0].Read = true
-		resp += "\n"
-		
-		// Loop through subbed chans and post notification message
-		fmt.Println("Looping through subs to notify...")
-		for _, v := range Config.Subs {
-			if v.SubID == id {
-				Session.ChannelMessageSend(v.ChanID, resp)
-			}
-			time.Sleep(10 * time.Millisecond)
+	resp := ".\n"
+	resp += "**" + Config.Feeds[id].Feed.Title + ": **" + "\n"
+	resp += Config.Feeds[id].Feed.Items[0].Date.String() + "\n\n"
+	resp += "`" + Config.Feeds[id].Feed.Items[0].Title + "`" + "\n"
+	resp += "\n" + Config.Feeds[id].Feed.Items[0].Link + "\n"
+	Config.Feeds[id].Feed.Items[0].Read = true
+	resp += "\n"
+	
+	// Loop through subbed chans and post notification message
+	fmt.Println("Looping through subs to notify...")
+	for _, v := range Config.Subs {
+		if v.SubID == id {
+			Session.ChannelMessageSend(v.ChanID, resp)
 		}
+		time.Sleep(10 * time.Millisecond)
 	}
-	fmt.Println("No new notifys for ", Config.Feeds[id].UpdateURL)
-	fmt.Println(Config.Feeds[id].Items[0])
-	fmt.Println(Config.Feeds[id].Items[len(Config.Feeds[id].Items)-1])
+
+	fmt.Println("No new notifys for ", Config.Feeds[id].Feed.UpdateURL)
+	fmt.Println(Config.Feeds[id].Feed.Items[0])
+	fmt.Println(Config.Feeds[id].Feed.Items[len(Config.Feeds[id].Feed.Items)-1])
 }
 
 
@@ -69,12 +81,12 @@ func (m *Mux) Last(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 
 	id, _ := strconv.Atoi(ctx.Fields[len(ctx.Fields) -1])
 	if id >= 0 && id < len(Config.Feeds) {
-		resp += "**" + Config.Feeds[id].Title + ": **" + "\n"
-		resp += Config.Feeds[id].Items[0].Date.String() + "\n\n"
-		resp += "`" + Config.Feeds[id].Items[0].Title + "`" + "\n"
-		resp += "\n" + Config.Feeds[id].Items[0].Link + "\n"
-		Config.Feeds[id].Items[0].Read = true
-		fmt.Println("Last-ing notification: ", Config.Feeds[id].Items[0])
+		resp += "**" + Config.Feeds[id].Feed.Title + ": **" + "\n"
+		resp += Config.Feeds[id].Feed.Items[0].Date.String() + "\n\n"
+		resp += "`" + Config.Feeds[id].Feed.Items[0].Title + "`" + "\n"
+		resp += "\n" + Config.Feeds[id].Feed.Items[0].Link + "\n"
+		Config.Feeds[id].Feed.Items[0].Read = true
+		fmt.Println("Last-ing notification: ", Config.Feeds[id].Feed.Items[0])
 	} else {
 		resp += "Denied fetch. Invalid stream id, see: list command"
 	}
@@ -91,7 +103,7 @@ func (m *Mux) List(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 	resp := "```\n"
 
 	for p, v := range Config.Feeds {
-		resp += strconv.Itoa(p) + ": " + v.Title + ", " + v.Link + "\n"
+		resp += strconv.Itoa(p) + ": " + v.Feed.Title + ", " + v.Feed.Link + "\n"
 	}
 
 	resp += "```\n"
@@ -111,7 +123,7 @@ func (m *Mux) Add(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 	
 	for _, v := range Config.Feeds {
 		// this is bad matching, can't have two bitbucket url's?
-		if strings.Contains(url, v.UpdateURL) {
+		if strings.Contains(url, v.Feed.UpdateURL) {
 			//fmt.Println(url)
 			//fmt.Println(v.Link)
 			resp += "Denied! Feed already subscribed to."
@@ -133,7 +145,11 @@ func (m *Mux) Add(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 	}
 	
 	// Might not be thread safe
-	Config.Feeds = append(Config.Feeds, *feed)
+	var tmpFeed Feed
+	tmpFeed.Feed = *feed
+	// Maybe make the size here a Config variable
+	tmpFeed.Recent = make([]string, 3)
+	Config.Feeds = append(Config.Feeds, tmpFeed)
 	resp += "Added."
 	
 	resp += "```\n"

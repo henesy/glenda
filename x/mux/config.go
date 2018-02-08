@@ -17,9 +17,15 @@ type Subscription struct {
 	SubID	int
 }
 
+// Stores a Feed and a list of the last n commits; n=3
+type Feed struct {
+	Feed		rss.Feed
+	Recent	[]string
+}
+
 // Stores config for current state
 type Configuration struct {
-	Feeds	[]rss.Feed
+	Feeds	[]Feed
 	Subs		[]Subscription
 }
 
@@ -27,6 +33,12 @@ type Configuration struct {
 func (c *Configuration) Init(s *discordgo.Session) {
 	c.Read()
 	Session = s
+	for id, _ := range Config.Feeds {
+		// maybe only do at init step?
+		str := Config.Feeds[id].Feed.UpdateURL
+		feed, _ := rss.Fetch(str)
+		Config.Feeds[id].Feed = *feed
+	}
 	go Listener()
 }
 

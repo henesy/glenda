@@ -34,5 +34,7 @@ func init() {
 
 	Router.Route("about", "General information about the bot.", Router.About)
 	
+	Router.Route("beer", ":beer:", Router.Beer)
+	
 
 }

@@ -49,5 +49,13 @@ func (m *Mux) Dump(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 	return
 }
 
+// Beer, dude.
+func (m *Mux) Beer(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
+	resp := ""
+	resp += ":beer:"
+	resp += "\n"
 
+	ds.ChannelMessageSend(dm.ChannelID, resp)
 
+	return
+}

@@ -16,7 +16,11 @@ func Listener() {
 	for {
 		for p, _ := range Config.Feeds {
 			fmt.Print("Updating feed: ", Config.Feeds[p].Feed.Title, "\n")
-			err := Config.Feeds[p].Feed.Update()
+			// maybe only do at init step?
+			str := Config.Feeds[p].Feed.UpdateURL
+			feed, err := rss.Fetch(str)
+			Config.Feeds[p].Feed = *feed
+			//err := Config.Feeds[p].Feed.Update()
 
 			if err != nil {
 				fmt.Println("Error in updating RSS feed, see: x/mux/commits.go")
@@ -27,14 +31,15 @@ func Listener() {
 					if Config.Feeds[p].Recent[j] == Config.Feeds[p].Feed.Items[0].Title {
 						fmt.Println("Checking Recent ", j, " against ", Config.Feeds[p].Feed.Items[0].Title)
 						additem = false
+						break
 					}
 				}
 				if additem {
 					// x y z → x y z 0 → y z 0
 					Config.Feeds[p].Recent = append(Config.Feeds[p].Recent, Config.Feeds[p].Feed.Items[0].Title)
 					Config.Feeds[p].Recent = Config.Feeds[p].Recent[1:]
-					break
 					Notify(p)
+					break
 				}
 			}
 			time.Sleep(1 * time.Minute)
@@ -45,11 +50,6 @@ func Listener() {
 
 // Notify subscribed channels to subscribed feeds
 func Notify(id int) {
-	// maybe only do at init step?
-	str := Config.Feeds[id].Feed.UpdateURL
-	feed, _ := rss.Fetch(str)
-	Config.Feeds[id].Feed = *feed
-
 	resp := ".\n"
 	resp += "**" + Config.Feeds[id].Feed.Title + ": **" + "\n"
 	resp += Config.Feeds[id].Feed.Items[0].Date.String() + "\n\n"

@@ -42,9 +42,11 @@ func Listener() {
 					break
 				}
 			}
-			time.Sleep(1 * time.Minute)
+			time.Sleep(2 * time.Minute)
 		}
-		time.Sleep(1 * time.Minute)
+		time.Sleep(10 * time.Minute)
+		// Dump config to file regularly
+		Config.Write()
 	}
 }
 
@@ -183,6 +185,37 @@ func (m *Mux) Subscribe(ds *discordgo.Session, dm *discordgo.Message, ctx *Conte
 		NOSUB:
 	} else {
 		resp += "Denied subscription. Invalid stream id, see: list command"
+	}
+	
+	resp += "\n"
+	ds.ChannelMessageSend(dm.ChannelID, resp)
+
+	return
+}
+
+// a = a[:i+copy(a[i:], a[i+1:])]
+// Unsubscribe current channel to notifications from a given feed id
+func (m *Mux) Unsubscribe(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
+	resp := "\n"
+
+	id, _ := strconv.Atoi(ctx.Fields[len(ctx.Fields) -1])
+	if id >= 0 && id < len(Config.Feeds) {
+		// Check if subscribed
+		removed := false
+		for i, v := range Config.Subs {
+			if v.ChanID == dm.ChannelID && v.SubID == id {
+				removed = true
+				Config.Subs = Config.Subs[:i+copy(Config.Subs[i:], Config.Subs[i+1:])]
+			}
+		}
+		
+		if(!removed) {
+			resp += "Denied unsubscription. Not subscribed in this channel."
+		} else {
+			resp += "Unsubscribed."
+		}
+	} else {
+		resp += "Denied unsubscription. Invalid stream id, see: list command"
 	}
 	
 	resp += "\n"

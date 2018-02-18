@@ -74,7 +74,7 @@ func (m *Mux) Man(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 				}
 				resp += string(url) + "\n"
 			}
-			time.Sleep(1 * time.Second)
+			time.Sleep(50 * time.Millisecond)
 		}
 		
 		// No matches

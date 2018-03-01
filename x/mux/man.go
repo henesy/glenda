@@ -83,7 +83,7 @@ func (m *Mux) Man(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 		}
 		
 	} else if len(ctx.Fields) == 1 {
-		resp += ".\n"
+		resp += "http://man.postnix.us/9front/\n"
 		for i:=1; i < 9; i++ {
 			resp += desc[i-1] + "\n"
 		}

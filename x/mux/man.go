@@ -163,6 +163,12 @@ func (m *Mux) Lookman(ds *discordgo.Session, dm *discordgo.Message, ctx *Context
 				resp += url
 			}
 		}
+	} else {
+		resp += "Usage: lookman key ...\n"
+	}
+	
+	if len(resp) > 2000 {
+		resp = "\nError: Lookman output exceeded Discord™ 2000 character limit."
 	}
 
 	END:

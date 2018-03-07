@@ -15,7 +15,7 @@ import (
 func Listener() {
 	for {
 		for p, _ := range Config.Feeds {
-			fmt.Print("Updating feed: ", Config.Feeds[p].Feed.Title, "\n")
+			//fmt.Print("Updating feed: ", Config.Feeds[p].Feed.Title, "\n")
 			// maybe only do at init step?
 			str := Config.Feeds[p].Feed.UpdateURL
 			feed, err := rss.Fetch(str)
@@ -29,13 +29,14 @@ func Listener() {
 				additem := true
 				for j, _ := range Config.Feeds[p].Recent {
 					if Config.Feeds[p].Recent[j] == Config.Feeds[p].Feed.Items[0].Title {
-						fmt.Println("Checking Recent ", j, " against ", Config.Feeds[p].Feed.Items[0].Title)
+						//fmt.Println("Checking Recent ", j, " against ", Config.Feeds[p].Feed.Items[0].Title)
 						additem = false
 						break
 					}
 				}
 				if additem {
 					// x y z → x y z 0 → y z 0
+					fmt.Println("Updating: ", Config.Feeds[p].Feed.Title)
 					Config.Feeds[p].Recent = append(Config.Feeds[p].Recent, Config.Feeds[p].Feed.Items[0].Title)
 					Config.Feeds[p].Recent = Config.Feeds[p].Recent[1:]
 					Notify(p)

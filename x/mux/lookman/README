@@ -1,0 +1,4 @@
+This is a copy of lookman/mkindex modified to handle a lookman index for a unix OS to query.
+
+The lookman script relies on being run in rc with (9) sed. A path can be set for sed.
+

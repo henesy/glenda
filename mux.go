@@ -32,7 +32,9 @@ func init() {
 	
 	Router.Route("unsubscribe", "Unsubscribe current channel to a given feed id.", Router.Unsubscribe)
 	
-	Router.Route("man", "Display a given Plan 9 manual page (From 9front for now).", Router.Man)
+	Router.Route("man", "Link a given Plan 9 manual page (From 9front for now).", Router.Man)
+
+	Router.Route("lookman", "Search for a string in the Plan 9 manual pages (From 9front for now).", Router.Lookman)
 
 	Router.Route("about", "General information about the bot.", Router.About)
 	

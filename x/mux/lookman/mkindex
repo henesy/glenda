@@ -1,0 +1,21 @@
+#!/bin/rc
+# creates the index used by lookman
+
+MIRROR=/usr/share/mirror/plan9front
+index=$MIRROR/sys/lib/man/lookman/index
+LIB=$MIRROR/sys/man
+
+>index
+for(i in $LIB^/[0-9]*/[a-z0-9:]*){
+	p=`{echo $i | sed 's@^$LIB^/\([^ ]\)/\([^ ]*\)$@\2(\1)@'}
+	deroff -w_ < $i |
+	tr 'A-Z' 'a-z' |
+	sort -u |
+	comm -23 - junkwords |
+	sed 's@$@	'$p'@' >>index		# stick file name on end of line
+}
+sort -o index index
+
+# Drop our index into the plan9front tree
+mv index $index
+

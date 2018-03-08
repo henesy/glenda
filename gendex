@@ -1,0 +1,6 @@
+#!/bin/rc
+
+# Helper to make os/exec.Command() easier
+cd x/mux/lookman
+./mkindex
+

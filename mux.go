@@ -28,6 +28,8 @@ func init() {
 
 	Router.Route("dump", "Dump config to file.", Router.Dump)
 	
+	Router.Route("mkindex", "Generate index for lookman from mirror.", Router.Mkindex)
+	
 	Router.Route("subscribe", "Subscribe current channel to a given feed id.", Router.Subscribe)
 	
 	Router.Route("unsubscribe", "Unsubscribe current channel to a given feed id.", Router.Unsubscribe)

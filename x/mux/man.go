@@ -131,7 +131,6 @@ func (m *Mux) Lookman(ds *discordgo.Session, dm *discordgo.Message, ctx *Context
 		// rc or get out
 		//fmt.Println("Running: ", args)
 		out, err := exec.Command("./x/mux/lookman/lookman", args...).Output()
-		fmt.Println("", err)
 		if err != nil {
 			resp += "No lookman script found."
 			goto END
@@ -174,4 +173,23 @@ func (m *Mux) Lookman(ds *discordgo.Session, dm *discordgo.Message, ctx *Context
 	END:
 	resp += "\n"
 	_, _ = ds.ChannelMessageSend(dm.ChannelID, resp)
+}
+
+// Call lookman on a given query
+func (m *Mux) Mkindex(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
+	resp := "\n"
+
+	out, err := exec.Command("./gendex").Output()
+	if err != nil {
+		fmt.Println(err)
+		resp += "No mkindex script found."
+		goto END
+	} else {
+		fmt.Println("Generating out: ", out)
+		resp += "Ok."
+	}
+
+	END: 
+	resp += "\n"
+	ds.ChannelMessageSend(dm.ChannelID, resp)
 }

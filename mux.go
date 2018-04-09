@@ -42,5 +42,5 @@ func init() {
 	
 	Router.Route("beer", ":beer:", Router.Beer)
 	
-
+	Router.Route("whiskey", ":tumbler_glass:", Router.Whiskey)
 }

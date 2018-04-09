@@ -59,3 +59,14 @@ func (m *Mux) Beer(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 
 	return
 }
+
+// Whiskey, dude.
+func (m *Mux) Whiskey(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
+	resp := ""
+	resp += ":tumbler_glass:"
+	resp += "\n"
+
+	ds.ChannelMessageSend(dm.ChannelID, resp)
+
+	return
+}

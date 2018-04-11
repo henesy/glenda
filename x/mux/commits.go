@@ -7,6 +7,7 @@ import (
 	"time"
 	"strings"
 	"strconv"
+	"html"
 )
 
 /* internal functions */
@@ -56,6 +57,17 @@ func Notify(id int) {
 	resp := ".\n"
 	resp += "**" + Config.Feeds[id].Feed.Title + ": **" + "\n"
 	resp += Config.Feeds[id].Feed.Items[0].Date.String() + "\n\n"
+	// If a 9front feed, extract the user ☺
+	if strings.Contains(Config.Feeds[id].Feed.Items[0].Link, "http://code.9front.org/hg/") {
+		lines := strings.Split(Config.Feeds[id].Feed.Items[0].Summary, "\n")
+		for i, v := range lines {
+			if strings.Contains(v, "<th style=\"text-align:left;vertical-align:top;\">user</th>") {
+				line := html.UnescapeString((lines[i+1])[6:len(lines[i+1])-5])
+				resp += line + "\n\n"
+				break
+			}
+		}
+	}
 	resp += "`" + Config.Feeds[id].Feed.Items[0].Title + "`" + "\n"
 	resp += "\n" + Config.Feeds[id].Feed.Items[0].Link + "\n"
 	Config.Feeds[id].Feed.Items[0].Read = true
@@ -86,7 +98,19 @@ func (m *Mux) Last(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 	if id >= 0 && id < len(Config.Feeds) {
 		resp += "**" + Config.Feeds[id].Feed.Title + ": **" + "\n"
 		resp += Config.Feeds[id].Feed.Items[0].Date.String() + "\n\n"
+		// If a 9front feed, extract the user ☺
+		if strings.Contains(Config.Feeds[id].Feed.Items[0].Link, "http://code.9front.org/hg/") {
+			lines := strings.Split(Config.Feeds[id].Feed.Items[0].Summary, "\n")
+			for i, v := range lines {
+				if strings.Contains(v, "<th style=\"text-align:left;vertical-align:top;\">user</th>") {
+					line := html.UnescapeString((lines[i+1])[6:len(lines[i+1])-5])
+					resp += line + "\n\n"
+					break
+				}
+			}
+		}
 		resp += "`" + Config.Feeds[id].Feed.Items[0].Title + "`" + "\n"
+		//resp += "\n" + Config.Feeds[id].Feed.Items[0].Summary + "\n"
 		resp += "\n" + Config.Feeds[id].Feed.Items[0].Link + "\n"
 		Config.Feeds[id].Feed.Items[0].Read = true
 		fmt.Println("Last-ing notification: ", Config.Feeds[id].Feed.Items[0])

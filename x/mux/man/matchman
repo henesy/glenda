@@ -1,0 +1,34 @@
+#!/bin/rc
+# Usage: matchman key
+# Matches all manual pages with the given name as the key 
+
+# Change these to match environment
+p9p=/usr/local/plan9port/bin
+awk=$p9p/awk
+sed=$p9p/sed
+grep=$p9p/grep
+MIRROR=/usr/share/mirror/plan9front
+LIB=$MIRROR/sys/man
+
+matches = ()
+
+sections = `{seq 8}
+for(section in $sections) {
+	pages = `{ls $LIB/$section/*}
+	for(page in $pages) {
+		names = `{$awk 'f{print;f=0} /NAME/{f=1}' $page | awk '{split($0,a, "\\"); print a[1]}' | awk '{split($0,a, "-"); print a[1]}'}
+		names = `{echo $names | $sed 's/,//g'}
+		names = `{echo $names | awk '{split($0,a, ", "); for (i in a) print a[i]}'}
+		
+		# We now have a list of names at the top of the man page (if the format is correct)
+		
+		for(name in $names) {
+			if(echo $name | $grep -q $1) {
+				matches = ($matches `{echo $page})
+			}
+		}
+	}
+}
+
+echo $matches
+

@@ -22,6 +22,11 @@ var desc []string = []string{
 	"Section (8) for things related to administering Plan 9."}
 
 
+// Match a term other than the title of the manual page for a manual page (6a should match the 2a man)
+func MatchMan(key string) {
+	
+}
+
 // Fetch a man page
 func (m *Mux) Man(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 	resp := "\n"
@@ -106,7 +111,7 @@ func (m *Mux) Man(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 }
 
 // Fetch a summary of a man page
-func (m *Mux) Sum(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
+func (m *Mux) Summary(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 
 }
 

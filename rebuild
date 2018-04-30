@@ -1,0 +1,4 @@
+#!/bin/bash
+# Rebuild script for hosting server
+go build; killall glenda; ./glenda > /home/seh/glenda.log 2>&1 &
+

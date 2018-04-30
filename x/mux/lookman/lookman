@@ -3,7 +3,7 @@
 #	prints out the names of all manual pages containing all the given keywords
 rfork e
 
-# Don't forget to change the bottom sed replacement path (variables don't work)
+# Change these to match environment
 sed=/usr/local/plan9port/bin/sed
 MIRROR=/usr/share/mirror/plan9front
 index=$MIRROR/sys/lib/man/lookman/index

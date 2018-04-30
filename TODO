@@ -1,14 +1,16 @@
 Features
-* Automated g!dump'ing of config file (backups?)
-* g!sum acid(1)
-* Support for acid(1) in g!man
+* g!sum acid(1) -- print summary
+* Support for acid(1) format in g!man
 * Search man blocks other than 9front's
 * Server greeting
 * 9front/plan9 source searching
 * various cat-v fetches (harmful, page search [get lucky])
 * Auto-propaganda processing for images (Black and White -> (9)-ify)
+* g!status -- display status/uptime info
+* g!remindme [time] text -- set a reminder for a given time (should work across bot reboots)
 
 --
 Problems
 * Move feed caching to another file than the .cfg (seriously this is a fcking mess)
-
+* Scripts should have a universal config such as an environment variable (more portable/configurable)
+* No role/user restrictions (should be a txt file of admin/mod users, maybe)

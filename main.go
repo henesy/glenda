@@ -77,12 +77,9 @@ func main() {
 	}
 
 	// Init Mux daemons
-	// Problem child Listener is
-//	go mux.Listener()
-
-//	go mux.CommMux()
-//	go CommMux()
 	go mux.Config.Init(Session)
+	mux.RemChan = make(chan mux.Reminder, 5)
+	go mux.Reminders()
 
 	Session.UpdateStatus(0, "with #cat-v")
 

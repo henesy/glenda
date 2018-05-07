@@ -11,6 +11,11 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
+
+// Global variables are bad
+var Config Configuration
+var Session *discordgo.Session
+
 // Stores subscription information for channels related to RSS feeds
 type Subscription struct {
 	ChanID	string
@@ -114,7 +119,3 @@ func (c *Configuration) Setup() {
 		fmt.Println(err)
 	}
 }
-
-// Global variables are bad
-var Config Configuration
-var Session *discordgo.Session

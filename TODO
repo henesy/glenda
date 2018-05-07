@@ -7,7 +7,6 @@ Features
 * various cat-v fetches (harmful, page search [get lucky])
 * Auto-propaganda processing for images (Black and White -> (9)-ify)
 * g!status -- display status/uptime info
-* g!remindme [time] text -- set a reminder for a given time (should work across bot reboots)
 
 --
 Problems

@@ -5,6 +5,7 @@ import (
 	"time"
 sc	"strconv"
 	"container/list"
+	"fmt"
 )
 
 
@@ -40,7 +41,7 @@ func Reminders() {
 				r, _ := e.Value.(Reminder)
 				if time.Now().After(r.NotifyAfter) {
 					// If we have passed the time of desired notification
-					r.Session.ChannelMessageSend(r.ChannelID, r.Reason)
+					r.Session.ChannelMessageSend(r.ChannelID, r.User.Mention() + " -- " + r.Reason)
 					rems.Remove(e)
 				}
 			}
@@ -57,7 +58,7 @@ func (m *Mux) RemindMe(ds *discordgo.Session, dm *discordgo.Message, ctx *Contex
 	// remindme 20m dothing
 	if len(ctx.Fields) >= 3 {
 		var rem Reminder
-		periodLong := ctx.Fields[len(ctx.Fields)-2]
+		periodLong := ctx.Fields[1]
 		reasonLong := ctx.Fields[2 : len(ctx.Fields)]
 		rem.User = *dm.Author
 		rem.ChannelID = dm.ChannelID
@@ -71,11 +72,16 @@ func (m *Mux) RemindMe(ds *discordgo.Session, dm *discordgo.Message, ctx *Contex
 		rem.Reason = reason
 		
 		interval := periodLong[len(periodLong)-1]
-		period, err := sc.Atoi(periodLong[:len(periodLong)-2])
+		period, err := sc.Atoi(periodLong[:len(periodLong)-1])
 		if err != nil {
 			resp += "Invalid period value."
 			goto SEND
 		}
+		
+		fmt.Println(interval)
+		fmt.Println(period)
+		fmt.Println(reason)
+		fmt.Println(time.Now)
 		
 		var dur time.Duration
 		switch interval {
@@ -85,12 +91,16 @@ func (m *Mux) RemindMe(ds *discordgo.Session, dm *discordgo.Message, ctx *Contex
 			dur = time.Minute
 		case 'h':
 			dur = time.Hour
+		case 'd':
+			dur = time.Hour * time.Duration(24)
 		default:
 			resp += "Invalid interval specifier."
 			goto SEND
 		}
 
 		rem.NotifyAfter = time.Now().Add(time.Duration(period) * dur)
+		
+		fmt.Println(rem)
 		
 		RemChan <- rem
 		

@@ -14,3 +14,6 @@ Problems
 * Move feed caching to another file than the .cfg (seriously this is a fcking mess)
 * Scripts should have a universal config such as an environment variable (more portable/configurable)
 * No role/user restrictions (should be a txt file of admin/mod users, maybe)
+* Reminders don't persist between bot reboots
+* Reminders should be hashed and deletable/modifiable by the creating user
+* Reminders should use a min heap

@@ -5,7 +5,6 @@ import (
 	"time"
 sc	"strconv"
 	"container/list"
-	"fmt"
 )
 
 
@@ -78,11 +77,6 @@ func (m *Mux) RemindMe(ds *discordgo.Session, dm *discordgo.Message, ctx *Contex
 			goto SEND
 		}
 		
-		fmt.Println(interval)
-		fmt.Println(period)
-		fmt.Println(reason)
-		fmt.Println(time.Now)
-		
 		var dur time.Duration
 		switch interval {
 		case 's':
@@ -99,8 +93,6 @@ func (m *Mux) RemindMe(ds *discordgo.Session, dm *discordgo.Message, ctx *Contex
 		}
 
 		rem.NotifyAfter = time.Now().Add(time.Duration(period) * dur)
-		
-		fmt.Println(rem)
 		
 		RemChan <- rem
 		

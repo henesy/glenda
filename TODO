@@ -16,3 +16,4 @@ Problems
 * Reminders don't persist between bot reboots
 * Reminders should be hashed and deletable/modifiable by the creating user
 * Reminders should use a min heap
+* Config is not modular and should allow config modules to be loaded and have .cfg files associated with them (such as for feeds and reminders)

@@ -5,6 +5,10 @@ import (
 	"time"
 sc	"strconv"
 	"container/list"
+	"fmt"
+	"os"
+	"encoding/json"
+	"strings"
 )
 
 
@@ -22,13 +26,70 @@ type Reminder struct {
 
 // Reminder daemon process that gets started in main and listens on RemChan
 func Reminders() {
-	// Should be a heap and persist across reboots
+	// TODO -- Should be a heap and more robus (fix config first)
+	
 	rems := list.New()
+	
+	RD:
+	f, err := os.Open("./cfg/reminders.cfg")
+	
+	write := func() (rerr error) {
+		e := json.NewEncoder(f)
+		err = e.Encode(rems)
+		if err != nil {
+			fmt.Println("Error writing config, see: remind.go")
+			fmt.Printf("%s\n", err)
+			rerr = err
+		}
+		return
+	}
+	
+	setup := func() (rerr error) {
+		
+		err := os.Mkdir("./cfg", 0774)
+		if err != nil {
+			fmt.Println("Error in making cfg dir, see: remind.go")
+			fmt.Println(err)
+		}
+		
+		_, err = os.Create("cfg/reminders.cfg")
+		if err != nil {
+			fmt.Println("Error in making cfg file, see: remind.go")
+			fmt.Println(err)
+		}
+		rerr = err
+		return
+	}
+	
+	defer f.Close()
+	if err != nil {
+		if strings.Contains(err.Error(), "no such file or directory") {
+			// danger: this can go infinite
+			setup()
+			goto RD
+		} else {
+			fmt.Println("Error opening config (r), see: remind.go")
+			fmt.Printf("%s\n", err)
+		}
+	} else {
+		d := json.NewDecoder(f)
+		err = d.Decode(&rems)
+		if err != nil {
+			fmt.Println("Error reading config, see: remind.go")
+			fmt.Printf("%s\n", err)
+			
+			write()
+		}
+	}
+	
+
+	// Handle reminders
 	for {
 		select {
 		case r := <- RemChan:
 			// Handle new reminder
 			rems.PushBack(r)
+			write()
 			
 		default:
 			// Check for any due reminders
@@ -42,6 +103,7 @@ func Reminders() {
 					// If we have passed the time of desired notification
 					r.Session.ChannelMessageSend(r.ChannelID, r.User.Mention() + " -- " + r.Reason)
 					rems.Remove(e)
+					write()
 				}
 			}
 		
@@ -95,6 +157,8 @@ func (m *Mux) RemindMe(ds *discordgo.Session, dm *discordgo.Message, ctx *Contex
 		rem.NotifyAfter = time.Now().Add(time.Duration(period) * dur)
 		
 		RemChan <- rem
+		
+		resp += "Ok."
 		
 	} else {
 		resp += "Please specify a time operator in the form [int][type] and a description (20h do thing)."

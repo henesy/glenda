@@ -20,10 +20,10 @@ func Listener() {
 			// maybe only do at init step?
 			str := Config.Feeds[p].Feed.UpdateURL
 			feed, err := rss.Fetch(str)
-			if err != nil {
+			if feed != nil {
 				Config.Feeds[p].Feed = *feed
 			} else {
-				fmt.Println("Got a nil pointer for feed in commits for ", str, " as ", err)
+				//fmt.Println("Got a nil pointer for feed in commits for ", str, " as ", err)
 			}
 			//err := Config.Feeds[p].Feed.Update()
 

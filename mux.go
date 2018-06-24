@@ -44,7 +44,7 @@ func init() {
 	
 	Router.Route("whiskey", ":tumbler_glass:", Router.Whiskey)
 	
-	Router.Route("wine", ":wine", Router.Wine)
+	Router.Route("wine", ":wine_glass", Router.Wine)
 	
 	Router.Route("remindme", "Set a reminder for a given time interval ([int][hmsd] [reminder]).", Router.RemindMe)
 }

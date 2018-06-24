@@ -74,7 +74,7 @@ func (m *Mux) Whiskey(ds *discordgo.Session, dm *discordgo.Message, ctx *Context
 // Wine, dude.
 func (m *Mux) Wine(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 	resp := ""
-	resp += ":wine:"
+	resp += ":wine_glass:"
 	resp += "\n"
 
 	ds.ChannelMessageSend(dm.ChannelID, resp)

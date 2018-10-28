@@ -21,8 +21,6 @@ func (m *Mux) Fortunes(ds *discordgo.Session, dm *discordgo.Message, ctx *Contex
 		f = "troll"
 	} else if strings.Contains(dm.Content, "rsc") {
 		f = "rsc"
-	} else if strings.Contains(dm.Content, "bullshit") {
-		f = "bullshit"
 	} else if strings.Contains(dm.Content, "terry") {
 		f = "terry"
 	} else if strings.Contains(dm.Content, "rob") {
@@ -48,3 +46,20 @@ func (m *Mux) Fortunes(ds *discordgo.Session, dm *discordgo.Message, ctx *Contex
 	return
 }
 
+// Display bullshit from 9front
+func (m *Mux) Bullshit(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
+	resp := "```\n"
+	
+	out, err := exec.Command("./x/mux/misc/bullshit").Output()
+	if err != nil {
+		resp += "No bullshit script found."
+		goto END
+	} else {
+		resp += string(out)
+	}
+	
+	END:
+	resp += "```\n"
+	ds.ChannelMessageSend(dm.ChannelID, resp)
+	return
+}

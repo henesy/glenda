@@ -43,7 +43,6 @@ type Configuration struct {
 
 // Initializes current config (called once at start) ­ just .Read()?
 func (c *Configuration) Init(s *discordgo.Session) {
-	Rems = list.New()
 	c.Read()
 	Session = s
 	for id, _ := range Feeds.Feeds {
@@ -55,6 +54,9 @@ func (c *Configuration) Init(s *discordgo.Session) {
 		} else {
 			fmt.Println("Failed to fetch feed: ", id)
 		}
+	}
+	if Rems == nil {
+		Rems = list.New()
 	}
 	go Listener()
 }
@@ -216,6 +218,7 @@ func (c *Configuration) Read() (rerr error) {
 			fmt.Println("Error reading reminders config, see: config.go")
 			fmt.Printf("%s\n", err)
 			rerr = err
+			Rems = list.New()
 			RemindersWrite()
 		}
 	}

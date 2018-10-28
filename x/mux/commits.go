@@ -52,7 +52,7 @@ func Listener() {
 		}
 		time.Sleep(10 * time.Minute)
 		// Dump config to file regularly
-		Config.Write()
+		//fmt.Println("", dump())
 	}
 }
 

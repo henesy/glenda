@@ -20,7 +20,7 @@ func init() {
 
 	Router.Route("fortune", "Display fortunes. Bonus files are (theo troll rsc terry rob ken).", Router.Fortunes)
 	
-	Router.Route("add", "Subscribe to an RSS feed.", Router.Add)
+	Router.Route("add", "Track an RSS feed.", Router.Add)
 	
 	Router.Route("list", "List RSS feeds Glenda is subscribed to by id.", Router.List)
 	
@@ -49,4 +49,6 @@ func init() {
 	Router.Route("remindme", "Set a reminder for a given time interval ([int][hmsd] [reminder]).", Router.RemindMe)
 	
 	Router.Route("bullshit", "Print logical statements with sound grounding.", Router.Bullshit)
+	
+	Router.Route("remove", "Remove a tracked RSS feed by ID.", Router.Remove)
 }

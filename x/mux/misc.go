@@ -31,18 +31,36 @@ func CommMux() {
 	}
 }
 
-// Dump config to file
-func (m *Mux) Dump(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
+// Dump configs to file
+func dump() string {
 	resp := ""
 
 	err := Config.Write()
 	if err != nil {
-		resp += "Dump failed. Check logs."
+		resp += "Dump config failed. Check logs.\n"
+	} else {
+		resp += "Ok."
+	}
+	err = Feeds.Write()
+	if err != nil {
+		resp += "Dump feeds failed. Check logs.\n"
+	} else {
+		resp += "Ok."
+	}
+	err = RemindersWrite()
+	if err != nil {
+		resp += "Dump reminders failed. Check logs.\n"
 	} else {
 		resp += "Ok."
 	}
 
 	resp += "\n"
+	return resp
+}
+
+// Dump config to file
+func (m *Mux) Dump(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
+	resp := dump()
 
 	ds.ChannelMessageSend(dm.ChannelID, resp)
 

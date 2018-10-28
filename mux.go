@@ -18,7 +18,7 @@ func init() {
 	// Register the build-in help command.
 	Router.Route("help", "Display this message.", Router.Help)
 
-	Router.Route("fortune", "Display fortunes. Bonus files are (theo troll rsc bullshit terry rob).", Router.Fortunes)
+	Router.Route("fortune", "Display fortunes. Bonus files are (theo troll rsc terry rob ken).", Router.Fortunes)
 	
 	Router.Route("add", "Subscribe to an RSS feed.", Router.Add)
 	
@@ -44,7 +44,9 @@ func init() {
 	
 	Router.Route("whiskey", ":tumbler_glass:", Router.Whiskey)
 	
-	Router.Route("wine", ":wine_glass", Router.Wine)
+	Router.Route("wine", ":wine_glass:", Router.Wine)
 	
 	Router.Route("remindme", "Set a reminder for a given time interval ([int][hmsd] [reminder]).", Router.RemindMe)
+	
+	Router.Route("bullshit", "Print logical statements with sound grounding.", Router.Bullshit)
 }

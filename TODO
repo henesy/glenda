@@ -1,19 +1,20 @@
 Features
 * g!sum acid(1) -- print summary
-* Support for acid(1) format in g!man
-* Search man blocks other than 9front's
+* Search man blocks other than 9front's in g!man
 * Server greeting
 * 9front/plan9 source searching
 * various cat-v fetches (harmful, page search [get lucky])
 * Auto-propaganda processing for images (Black and White -> (9)-ify)
 * g!status -- display status/uptime info
+* g!9fans -- scrape 9fans mailing list for term(s)
+* Discord <-> IRC bridge to ##9fans
 
 --
 Problems
-* Move feed caching to another file than the .cfg (seriously this is a fcking mess)
 * Scripts should have a universal config such as an environment variable (more portable/configurable)
 * No role/user restrictions (should be a txt file of admin/mod users, maybe)
 * Reminders don't persist between bot reboots
 * Reminders should be hashed and deletable/modifiable by the creating user
 * Reminders should use a min heap
 * Config is not modular and should allow config modules to be loaded and have .cfg files associated with them (such as for feeds and reminders)
+

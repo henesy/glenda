@@ -18,9 +18,23 @@ func init() {
 	// Register the build-in help command.
 	Router.Route("help", "Display this message.", Router.Help)
 
+	Router.Route("about", "General information about the bot.", Router.About)
+	
+	Router.Route("newuser", "Information for new users of Plan 9.", Router.Newuser)
+	
+	Router.Route("remindme", "Set a reminder for a given time interval ([int][hmsd] [reminder]).", Router.RemindMe)
+	
+	Router.Route("man", "Link a given Plan 9 manual page (From 9front for now).", Router.Man)
+
+	Router.Route("lookman", "Search for a string in the Plan 9 manual pages (From 9front for now).", Router.Lookman)
+
 	Router.Route("fortune", "Display fortunes. Bonus files are (theo troll rsc terry rob ken).", Router.Fortunes)
 	
+	Router.Route("bullshit", "Print logical statements with sound grounding.", Router.Bullshit)
+	
 	Router.Route("add", "Track an RSS feed.", Router.Add)
+	
+	Router.Route("remove", "Remove a tracked RSS feed by ID.", Router.Remove)
 	
 	Router.Route("list", "List RSS feeds Glenda is subscribed to by id.", Router.List)
 	
@@ -34,21 +48,9 @@ func init() {
 	
 	Router.Route("unsubscribe", "Unsubscribe current channel to a given feed id.", Router.Unsubscribe)
 	
-	Router.Route("man", "Link a given Plan 9 manual page (From 9front for now).", Router.Man)
-
-	Router.Route("lookman", "Search for a string in the Plan 9 manual pages (From 9front for now).", Router.Lookman)
-
-	Router.Route("about", "General information about the bot.", Router.About)
-	
 	Router.Route("beer", ":beer:", Router.Beer)
 	
 	Router.Route("whiskey", ":tumbler_glass:", Router.Whiskey)
 	
 	Router.Route("wine", ":wine_glass:", Router.Wine)
-	
-	Router.Route("remindme", "Set a reminder for a given time interval ([int][hmsd] [reminder]).", Router.RemindMe)
-	
-	Router.Route("bullshit", "Print logical statements with sound grounding.", Router.Bullshit)
-	
-	Router.Route("remove", "Remove a tracked RSS feed by ID.", Router.Remove)
 }

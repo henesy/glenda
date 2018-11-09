@@ -1,6 +1,8 @@
 # Glenda Bot
-Dis**go**rd is an example of or starting point for creating an easy to use and 
-extensible Discord bot using the [DiscordGo](https://github.com/bwmarrin/discordgo) 
+Glenda is the 9fans friendly neighborhood rabbit. 
+
+Glenda was made using the [Dis**go**rd](https://github.com/bwmarrin/disgord) 
+template of the [DiscordGo](https://github.com/bwmarrin/discordgo) 
 library.
 
 ### Dependencies

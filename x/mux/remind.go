@@ -37,18 +37,20 @@ func Reminders() {
 			
 		default:
 			// Check for any due reminders
-			if Rems.Front() != nil {
-				for e := Rems.Front(); ; e = e.Next() {
-					if e == nil {
-						break
-					}
-					
-					r, _ := e.Value.(Reminder)
-					if time.Now().After(r.NotifyAfter) {
-						// If we have passed the time of desired notification
-						r.Session.ChannelMessageSend(r.ChannelID, r.User.Mention() + " -- " + r.Reason)
-						Rems.Remove(e)
-						//write()
+			if Rems != nil {
+				if Rems.Front() != nil {
+					for e := Rems.Front(); ; e = e.Next() {
+						if e == nil {
+							break
+						}
+						
+						r, _ := e.Value.(Reminder)
+						if time.Now().After(r.NotifyAfter) {
+							// If we have passed the time of desired notification
+							r.Session.ChannelMessageSend(r.ChannelID, r.User.Mention() + " -- " + r.Reason)
+							Rems.Remove(e)
+							//write()
+						}
 					}
 				}
 			}

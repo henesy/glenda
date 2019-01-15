@@ -111,8 +111,35 @@ func (m *Mux) Man(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 }
 
 // Fetch a summary of a man page
-func (m *Mux) Summary(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
+func (m *Mux) Sig(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
+	resp := "\n```"
 
+	if !(len(ctx.Fields) >= 2) {
+		resp += "Usage: lookman key ...\n"
+	} else {
+		// g!sig vmx
+		args := ctx.Fields[1:]
+	
+		// rc or get out
+		out, err := exec.Command("./x/mux/man/sig", args...).Output()
+		if err != nil {
+			resp += "No sig script found."
+			goto END
+		} else {
+			if len(out) < 2 {
+				resp += "No matching definitions found."
+				goto END
+			}
+			
+			str := string(out)
+			// lines := strings.Split(str, "\n")
+			resp += str
+		}
+	} 
+
+	END:
+	resp += "```\n"
+	ds.ChannelMessageSend(dm.ChannelID, resp)
 }
 
 // Call lookman on a given query

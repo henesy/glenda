@@ -55,4 +55,6 @@ func init() {
 	Router.Route("whiskey", ":tumbler_glass:", Router.Whiskey)
 	
 	Router.Route("wine", ":wine_glass:", Router.Wine)
+	
+	Router.Route("uptime", "Current bot uptime", Router.Uptime)
 }

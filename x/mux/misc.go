@@ -14,6 +14,9 @@ var MuxChan chan string
 // Chan for communicating with Dump
 var dumpChan chan string
 
+// Stores the time that the bot started this boot
+var StartTime time.Time
+
 
 // Multiplex internal channels, initialized once
 func CommMux() {
@@ -56,6 +59,17 @@ func dump() string {
 
 	resp += "\n"
 	return resp
+}
+
+// Return the current uptime
+func (m *Mux) Uptime(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
+	resp := ""
+	
+	resp += time.Now().Sub(StartTime).String()
+
+	ds.ChannelMessageSend(dm.ChannelID, resp)
+
+	return
 }
 
 // Dump config to file

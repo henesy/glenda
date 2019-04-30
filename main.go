@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 	"github.com/bwmarrin/discordgo"
 	"bitbucket.org/henesy/glenda/x/mux"
 sc	"strconv"
@@ -75,6 +76,9 @@ func main() {
 		log.Printf("error opening connection to Discord, %s\n", err)
 		os.Exit(1)
 	}
+	
+	// Init boot vars
+	mux.StartTime = time.Now()
 
 	// Init Mux daemons
 	go mux.Config.Init(Session)

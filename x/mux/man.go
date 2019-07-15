@@ -40,12 +40,12 @@ func (m *Mux) Man(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 		page += ctx.Fields[len(ctx.Fields)-1]
 	
 		// Should allow selection of manual categories beyond 9front
-		url := "http://man.postnix.us/9front/" + section + "/" + page
+		url := "http://man.postnix.pw/9front/" + section + "/" + page
 		
 		page, err := http.Get(url)
 		if err != nil {
 			fmt.Println("Error fetching URL, see: x/mux/man.go")
-			resp += "Error fetching URL. Is man.postnix.us up?"
+			resp += "Error fetching URL. Is man.postnix.pw up?"
 			goto URL
 		}
 		defer page.Body.Close()
@@ -66,7 +66,7 @@ func (m *Mux) Man(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 		
 		for i:=1; i < 9; i++ {
 			// Should allow selection of manual categories beyond 9front
-			url := "http://man.postnix.us/9front/" + strconv.Itoa(i) + "/" + page
+			url := "http://man.postnix.pw/9front/" + strconv.Itoa(i) + "/" + page
 			
 			page, err := http.Get(url)
 			defer page.Body.Close()
@@ -90,7 +90,7 @@ func (m *Mux) Man(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 		}
 		
 	} else if len(ctx.Fields) == 1 {
-		resp += "http://man.postnix.us/9front/\n"
+		resp += "http://man.postnix.pw/9front/\n"
 		for i:=1; i < 9; i++ {
 			resp += desc[i-1] + "\n"
 		}
@@ -183,7 +183,7 @@ func (m *Mux) Lookman(ds *discordgo.Session, dm *discordgo.Message, ctx *Context
 				i := fields[1]
 				page := fields[2]
 				
-				url := "http://man.postnix.us/9front/" + i + "/" + page + " # " + fields[4] + "\n"
+				url := "http://man.postnix.pw/9front/" + i + "/" + page + " # " + fields[4] + "\n"
 	
 				if top {
 					top = false

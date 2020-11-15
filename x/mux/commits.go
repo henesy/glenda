@@ -87,8 +87,11 @@ func Notify(id int) {
 	}
 
 	fmt.Println("No new notifys for ", Config.Feeds[id].Feed.UpdateURL)
+	
+	/* Enable for logging if subs break
 	fmt.Println(Config.Feeds[id].Feed.Items[0])
 	fmt.Println(Config.Feeds[id].Feed.Items[len(Config.Feeds[id].Feed.Items)-1])
+	*/
 }
 
 
@@ -146,6 +149,11 @@ func (m *Mux) List(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 
 // Add a given feed to be tracked within glenda
 func (m *Mux) Add(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
+	if !authorized(dm) {
+		ds.ChannelMessageSend(dm.ChannelID, "Only the bot owner can do that.")
+		return
+	}
+
 	//http://code.9front.org/hg/plan9front/rss-log
 	resp := "```\n"
 	// URL to feed should be last item
@@ -191,6 +199,11 @@ func (m *Mux) Add(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 
 // Stop tracking a given feed
 func (m *Mux) Remove(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
+	if !authorized(dm) {
+		ds.ChannelMessageSend(dm.ChannelID, "Only the bot owner can do that.")
+		return
+	}
+
 	//http://code.9front.org/hg/plan9front/rss-log
 	resp := "```\n"
 	// ID to feed should be last item

@@ -40,12 +40,12 @@ func (m *Mux) Man(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 		page += ctx.Fields[len(ctx.Fields)-1]
 	
 		// Should allow selection of manual categories beyond 9front
-		url := "http://man.postnix.pw/9front/" + section + "/" + page
+		url := Config.Db["mansite"] + section + "/" + page
 		
 		page, err := http.Get(url)
 		if err != nil {
 			fmt.Println("Error fetching URL, see: x/mux/man.go")
-			resp += "Error fetching URL. Is man.postnix.pw up?"
+			resp += "Error fetching URL. Is " + Config.Db["mansite"] + " up?"
 			goto URL
 		}
 		defer page.Body.Close()
@@ -66,7 +66,7 @@ func (m *Mux) Man(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 		
 		for i:=1; i < 9; i++ {
 			// Should allow selection of manual categories beyond 9front
-			url := "http://man.postnix.pw/9front/" + strconv.Itoa(i) + "/" + page
+			url := Config.Db["mansite"] + strconv.Itoa(i) + "/" + page
 			
 			page, err := http.Get(url)
 			defer page.Body.Close()
@@ -90,7 +90,7 @@ func (m *Mux) Man(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 		}
 		
 	} else if len(ctx.Fields) == 1 {
-		resp += "http://man.postnix.pw/9front/\n"
+		resp += Config.Db["mansite"]  + "\n"
 		for i:=1; i < 9; i++ {
 			resp += desc[i-1] + "\n"
 		}
@@ -121,7 +121,7 @@ func (m *Mux) Sig(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 		args := ctx.Fields[1:]
 	
 		// rc or get out
-		out, err := exec.Command("./x/mux/man/sig", args...).Output()
+		out, err := exec.Command(Config.Db["sig"], args...).Output()
 		if err != nil {
 			resp += "No sig script found."
 			goto END
@@ -162,7 +162,7 @@ func (m *Mux) Lookman(ds *discordgo.Session, dm *discordgo.Message, ctx *Context
 	
 		// rc or get out
 		//fmt.Println("Running: ", args)
-		out, err := exec.Command("./x/mux/lookman/lookman", args...).Output()
+		out, err := exec.Command(Config.Db["lookman"], args...).Output()
 		if err != nil {
 			resp += "No lookman script found."
 			goto END
@@ -183,7 +183,7 @@ func (m *Mux) Lookman(ds *discordgo.Session, dm *discordgo.Message, ctx *Context
 				i := fields[1]
 				page := fields[2]
 				
-				url := "http://man.postnix.pw/9front/" + i + "/" + page + " # " + fields[4] + "\n"
+				url := Config.Db["mansite"] + i + "/" + page + " # " + fields[4] + "\n"
 	
 				if top {
 					top = false
@@ -209,9 +209,14 @@ func (m *Mux) Lookman(ds *discordgo.Session, dm *discordgo.Message, ctx *Context
 
 // Call lookman on a given query
 func (m *Mux) Mkindex(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
+	if !authorized(dm) {
+		ds.ChannelMessageSend(dm.ChannelID, "Only the bot owner can do that.")
+		return
+	}
+
 	resp := "\n"
 
-	out, err := exec.Command("./gendex").Output()
+	out, err := exec.Command(Config.Db["gendex"]).Output()
 	if err != nil {
 		fmt.Println(err)
 		resp += "No mkindex script found."

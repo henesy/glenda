@@ -8,6 +8,8 @@ import (
 	"fmt"
 	"strings"
 	"errors"
+	"strconv"
+	"time"
 	"github.com/SlyMarbo/rss"
 	"github.com/bwmarrin/discordgo"
 )
@@ -44,10 +46,38 @@ type Configuration struct {
 // Initializes current config (called once at start) ­ just .Read()?
 func (c *Configuration) Init(s *discordgo.Session) {
 	c.Db = map[string]string {
-		"owner":	"188698402727526400",		// Henesy
-		"name":	"glenda.cfg",
-		"dir": "./cfg",
+		"owner":		"188698402727526400",			// Henesy
+		"name":		"glenda.cfg",					// Config file name
+		"dir":			"./cfg",						// Config dir
+		"delay":		"20",							// Minutes
+		"mansite":		"http://man.postnix.pw/9front/",	// Henesy's
+		
+		"lookman":	"./x/mux/lookman/lookman",		// Vendored
+		"sig":		"./x/mux/man/sig",			// ^
+		"gendex":		"./gendex",					// ^
+		"bullshit":		"./x/mux/misc/bullshit",			// ^
+		
+		"extrafortunes":	"../sys/games/lib/fortunes",			// Unix
+		"fortunes":		"/usr/share/mirror/plan9front/lib/",	// Plan 9
+		
 		}
+		
+	// Regularly dump the config
+	go func() {
+		delay, err := strconv.Atoi(c.Db["delay"])
+		if err != nil {
+			fmt.Println("bad delay value, using default")
+			delay = 20
+		}
+		
+		select {
+		case <-dumpChan:
+			dump()
+
+		case <- time.After(time.Duration(delay) * time.Minute):
+			dump()
+		}
+	}()
 
 	err := c.Read()
 	if err != nil {

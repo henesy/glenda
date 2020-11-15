@@ -3,14 +3,14 @@ package main
 import (
 	"flag"
 	"fmt"
+	"github.com/bwmarrin/discordgo"
+	"github.com/henesy/glenda/x/mux"
 	"log"
 	"os"
 	"os/signal"
+	sc "strconv"
 	"syscall"
 	"time"
-	"github.com/bwmarrin/discordgo"
-	"github.com/henesy/glenda/x/mux"
-sc	"strconv"
 )
 
 const Version = "v0.1.1"
@@ -76,7 +76,7 @@ func main() {
 		log.Printf("error opening connection to Discord, %s\n", err)
 		os.Exit(1)
 	}
-	
+
 	// Init boot vars
 	mux.StartTime = time.Now()
 
@@ -98,4 +98,3 @@ func main() {
 
 	// Exit Normally.
 }
-

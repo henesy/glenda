@@ -12,7 +12,7 @@ func (m *Mux) Fortunes(ds *discordgo.Session, dm *discordgo.Message, ctx *Contex
 	resp := "```\n"
 
 	// Read relevant file
-	path := "/usr/share/mirror/plan9front/lib/"
+	path := Config.Db["fortunes"]
 
 	f := ""
 	if strings.Contains(dm.Content, "theo") {
@@ -32,7 +32,7 @@ func (m *Mux) Fortunes(ds *discordgo.Session, dm *discordgo.Message, ctx *Contex
 	} else if strings.Contains(dm.Content, "davros") {
 		f = "davros"
 	} else {
-		f = "../sys/games/lib/fortunes"
+		f = Config.Db["extrafortunes"]
 	}
 
 	// Linux solution
@@ -54,7 +54,7 @@ func (m *Mux) Fortunes(ds *discordgo.Session, dm *discordgo.Message, ctx *Contex
 func (m *Mux) Bullshit(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 	resp := "```\n"
 	
-	out, err := exec.Command("./x/mux/misc/bullshit").Output()
+	out, err := exec.Command(Config.Db["bs"]).Output()
 	if err != nil {
 		resp += "No bullshit script found."
 		goto END

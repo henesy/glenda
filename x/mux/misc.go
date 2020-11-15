@@ -59,8 +59,25 @@ func (m *Mux) Uptime(ds *discordgo.Session, dm *discordgo.Message, ctx *Context)
 	return
 }
 
+// Check authorization as owner
+func authorized(dm *discordgo.Message) bool {
+	user := dm.Author
+	id := user.ID
+	
+	if id == Config.Db["owner"] {
+		return true
+	}
+	
+	return false
+}
+
 // Dump config to file
 func (m *Mux) Dump(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
+	if !authorized(dm) {
+		ds.ChannelMessageSend(dm.ChannelID, "Only the bot owner can do that.")
+		return
+	}
+
 	resp := dump()
 
 	ds.ChannelMessageSend(dm.ChannelID, resp)

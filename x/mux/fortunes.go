@@ -29,6 +29,8 @@ func (m *Mux) Fortunes(ds *discordgo.Session, dm *discordgo.Message, ctx *Contex
 		f = "ken"
 	} else if strings.Contains(dm.Content, "henesy") {
 		f = "henesy"
+	} else if strings.Contains(dm.Content, "davros") {
+		f = "davros"
 	} else {
 		f = "../sys/games/lib/fortunes"
 	}

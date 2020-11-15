@@ -32,7 +32,7 @@ func init() {
 
 	Router.Route("sig", "Search for function definitions in the Plan 9 manual pages (From 9front for now).", Router.Sig)
 
-	Router.Route("fortune", "Display fortunes. Bonus files are (theo troll rsc terry rob ken henesy).", Router.Fortunes)
+	Router.Route("fortune", "Display fortunes. Bonus files are (theo troll rsc terry rob ken henesy davros).", Router.Fortunes)
 	
 	Router.Route("bullshit", "Print logical statements with sound grounding.", Router.Bullshit)
 	

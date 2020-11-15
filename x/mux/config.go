@@ -70,12 +70,15 @@ func (c *Configuration) Init(s *discordgo.Session) {
 			delay = 20
 		}
 		
-		select {
-		case <-dumpChan:
-			dump()
+		for {
+			select {
+			case <-dumpChan:
+				dump()
 
-		case <- time.After(time.Duration(delay) * time.Minute):
-			dump()
+			case <- time.After(time.Duration(delay) * time.Minute):
+				dump()
+			}
+			time.Sleep(5 * time.Millisecond)
 		}
 	}()
 

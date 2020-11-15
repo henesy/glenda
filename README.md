@@ -19,7 +19,7 @@ go get github.com/SlyMarbo/rss
 
 ### Usage
 ```
-cd $GOPATH/src/bitbucket.org/henesy/glenda
+cd $GOPATH/src/github.com/henesy/glenda
 go build
 ./glenda -t 'Bot BOT_AUTH_TOKEN'
 ```

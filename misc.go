@@ -3,7 +3,6 @@ package main
 // Miscellaneous utilities for communicating with Mux
 
 import (
-//	"bitbucket.org/henesy/glenda/x/mux"
 	"time"
 )
 

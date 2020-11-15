@@ -9,7 +9,7 @@ import (
 	"syscall"
 	"time"
 	"github.com/bwmarrin/discordgo"
-	"bitbucket.org/henesy/glenda/x/mux"
+	"github.com/henesy/glenda/x/mux"
 sc	"strconv"
 )
 

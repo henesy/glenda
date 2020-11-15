@@ -4,7 +4,9 @@ package main
 // to the Disgord bot. This is an optional addition however it is included
 // by default to demonstrate how to extend the Disgord bot.
 
-import "bitbucket.org/henesy/glenda/x/mux"
+import (
+	"github.com/henesy/glenda/x/mux"
+)
 
 // Router is registered as a global variable to allow easy access to the
 // multiplexer throughout the bot.

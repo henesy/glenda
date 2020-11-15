@@ -44,19 +44,6 @@ func dump() string {
 	} else {
 		resp += "Ok."
 	}
-	err = Feeds.Write()
-	if err != nil {
-		resp += "Dump feeds failed. Check logs.\n"
-	} else {
-		resp += "Ok."
-	}
-	err = RemindersWrite()
-	if err != nil {
-		resp += "Dump reminders failed. Check logs.\n"
-	} else {
-		resp += "Ok."
-	}
-
 	resp += "\n"
 	return resp
 }

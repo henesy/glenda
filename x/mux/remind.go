@@ -25,33 +25,52 @@ type Reminder struct {
 func Reminders() {
 	// TODO -- Should be a heap and more robust (fix config first)
 	
-	//Rems := list.New()
+	//Config.Reminders := list.New()
 
 	// Handle reminders
 	for {
 		select {
 		case r := <- RemChan:
 			// Handle new reminder
-			Rems.PushBack(r)
+			Config.Reminders = append(Config.Reminders, r)
 			//write()
 			
 		default:
 			// Check for any due reminders
-			if Rems != nil {
-				if Rems.Front() != nil {
-					for e := Rems.Front(); ; e = e.Next() {
-						if e == nil {
-							break
+			for i, r := range Config.Reminders {
+				if time.Now().After(r.NotifyAfter) {
+					// If we have passed the time of desired notification
+					r.Session.ChannelMessageSend(r.ChannelID, r.User.Mention() + " -- " + r.Reason)
+					
+					// Delete the reminder
+					// God this is ugly
+					switch len(Config.Reminders) {
+					case 1:
+						// Make empty safely
+						Config.Reminders = []Reminder{}
+					case 2:
+						// Binary switch
+						switch i {
+						case 0:
+							Config.Reminders = []Reminder{Config.Reminders[1]}
+						case 1:
+							Config.Reminders = []Reminder{Config.Reminders[0]}
 						}
-						
-						r, _ := e.Value.(Reminder)
-						if time.Now().After(r.NotifyAfter) {
-							// If we have passed the time of desired notification
-							r.Session.ChannelMessageSend(r.ChannelID, r.User.Mention() + " -- " + r.Reason)
-							Rems.Remove(e)
-							//write()
+					default:
+						switch i {
+						case len(Config.Reminders) - 1:
+							// Last
+							Config.Reminders = Config.Reminders[:i]
+						case 0:
+							// First
+							Config.Reminders = Config.Reminders[i+1:]
+						default:
+							// Not first nor last
+							Config.Reminders = append(Config.Reminders[:i], Config.Reminders[i+1:]...)
 						}
 					}
+
+					//write()
 				}
 			}
 		

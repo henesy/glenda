@@ -13,7 +13,7 @@ import (
 sc	"strconv"
 )
 
-const Version = "v0.1.0-alpha"
+const Version = "v0.1.1"
 
 // Session is declared in the global space so it can be easily used
 // throughout this program.

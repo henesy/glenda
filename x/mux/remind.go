@@ -4,8 +4,6 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"time"
 sc	"strconv"
-//	"container/list"
-//	"fmt"
 )
 
 
@@ -18,14 +16,11 @@ type Reminder struct {
 	Reason		string
 	User			discordgo.User
 	ChannelID	string
-	Session		discordgo.Session
 }
 
 // Reminder daemon process that gets started in main and listens on RemChan
 func Reminders() {
 	// TODO -- Should be a heap and more robust (fix config first)
-	
-	//Config.Reminders := list.New()
 
 	// Handle reminders
 	for {
@@ -40,7 +35,7 @@ func Reminders() {
 			for i, r := range Config.Reminders {
 				if time.Now().After(r.NotifyAfter) {
 					// If we have passed the time of desired notification
-					r.Session.ChannelMessageSend(r.ChannelID, r.User.Mention() + " -- " + r.Reason)
+					Session.ChannelMessageSend(r.ChannelID, r.User.Mention() + " -- " + r.Reason)
 					
 					// Delete the reminder
 					// God this is ugly
@@ -90,7 +85,7 @@ func (m *Mux) RemindMe(ds *discordgo.Session, dm *discordgo.Message, ctx *Contex
 		reasonLong := ctx.Fields[2 : len(ctx.Fields)]
 		rem.User = *dm.Author
 		rem.ChannelID = dm.ChannelID
-		rem.Session = *ds
+		//rem.Session = *ds
 		
 		reason := ""
 		for _, v := range reasonLong {

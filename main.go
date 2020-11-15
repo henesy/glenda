@@ -81,7 +81,7 @@ func main() {
 	mux.StartTime = time.Now()
 
 	// Init Mux daemons
-	go mux.Config.Init(Session)
+	mux.Config.Init(Session)
 	mux.RemChan = make(chan mux.Reminder, 5)
 	go mux.Reminders()
 

@@ -7,9 +7,9 @@ import (
 	"os"
 	"fmt"
 	"strings"
+	"errors"
 	"github.com/SlyMarbo/rss"
 	"github.com/bwmarrin/discordgo"
-	"time"
 )
 
 
@@ -43,12 +43,26 @@ type Configuration struct {
 
 // Initializes current config (called once at start) ­ just .Read()?
 func (c *Configuration) Init(s *discordgo.Session) {
-	c.Read()
+	c.Db = map[string]string {
+		"owner":	"188698402727526400",		// Henesy
+		"name":	"glenda.cfg",
+		"dir": "./cfg",
+		}
+
+	err := c.Read()
+	if err != nil {
+		fmt.Println("read cfg failed: -", err)
+		
+		c.Setup()
+	}
+	
 	Session = s
+	
 	for id, _ := range Config.Feeds {
 		// maybe only do at init step?
 		str := Config.Feeds[id].Feed.UpdateURL
 		feed, _ := rss.Fetch(str)
+		
 		if feed != nil {
 			Config.Feeds[id].Feed = *feed
 		} else {
@@ -56,87 +70,107 @@ func (c *Configuration) Init(s *discordgo.Session) {
 		}
 	}
 	
-	if c.Db == nil {
-		c.Db = map[string]string {
-		"name":	"glenda.cfg",
-		"dir": "./cfg",
-		}
-	}
-	
 	go Listener()
 }
 
-// Writes current config
-func (c *Configuration) Write() (rerr error) {
+// Writes current config to file
+func (c *Configuration) Write() error {
+	path := c.Db["dir"] + "/" + c.Db["name"]
+	
+	if path == "/" {
+		return errors.New("'dir' and 'name' must be in config")
+	}
+	
+	var f *os.File
+	var err error
+	
 	WRITE:
-	rerr = nil
-	f, err := os.OpenFile(c.Db["dir"] + "/" + c.Db["name"], os.O_RDWR, 0666)
+	f, err = os.OpenFile(path, os.O_RDWR, 0666)
 	defer f.Close()
+	
 	if err != nil {
 		if strings.Contains(err.Error(), "no such file or directory") {
-			// Create and try again
-			// danger: this can go infinite
-			Config.Setup()
-			time.Sleep(5 * time.Millisecond)
+			// Create files
+			err = Config.Setup()
+			if err != nil {
+				// We have a creation problem
+				return err
+			}
+			
+			// Try again
 			goto WRITE
+			
 		} else {
-			fmt.Println("Error opening config (w), see: config.go")
-			fmt.Printf("%s\n", err)
-			rerr = err
+			fmt.Println("Error opening config (w), see: config.go -", err)
+			return err
 		}
 	} else {
+		// Serialize
 		e := json.NewEncoder(f)
 		err = e.Encode(Config)
 		if err != nil {
-			fmt.Println("Error writing config, see: config.go")
-			fmt.Printf("%s\n", err)
-			rerr = err
+			fmt.Println("Error writing config (w), see: config.go -", err)
+			defer Config.Write()
+			
+			return err
 		}
 	}
 
-	return
+	return nil
 }
 
 // Reads current config into memory
-func (c *Configuration) Read() (rerr error) {
-	READ:
-	f, err := os.Open(c.Db["dir"] + "/" + c.Db["name"])
-	defer f.Close()
-	if err != nil {
-		if strings.Contains(err.Error(), "no such file or directory") {
-			// danger: this can go infinite
-			Config.Setup()
-			goto READ
-		} else {
-			fmt.Println("Error opening config (r), see: config.go")
-			fmt.Printf("%s\n", err)
-			rerr = err
-		}
-	} else {
-		d := json.NewDecoder(f)
-		err = d.Decode(&Config)
-		if err != nil {
-			fmt.Println("Error reading config, see: config.go")
-			fmt.Printf("%s\n", err)
-			rerr = err
-			Config.Write()
-		}
+func (c *Configuration) Read() error {
+	path := c.Db["dir"] + "/" + c.Db["name"]
+	
+	if path == "/" {
+		return errors.New("'dir' and 'name' must be in config")
 	}
 
-	return
+	var f *os.File
+	var err error
+	
+	f, err = os.Open(path)
+	defer f.Close()
+	
+	if err != nil {
+		return err
+	}
+	
+	// De-serialize
+	d := json.NewDecoder(f)
+	err = d.Decode(&Config)
+	if err != nil {
+		fmt.Println("Error reading config (r), see: config.go -", err)
+		
+		// Overwrite since the file is bad
+		defer Config.Write()
+		
+		return err
+	}
+
+	return nil
 }
 
 // Set up config for the first time (if one doesn't exist)
-func (c *Configuration) Setup() {
+func (c *Configuration) Setup() error {
 	err := os.Mkdir(c.Db["dir"], 0774)
 	if err != nil {
-		fmt.Println("Error in making cfg dir, see: config.go")
-		fmt.Println(err)
+		fmt.Println("Error in making cfg dir, see: config.go -", err)
+		
+		if !strings.Contains(err.Error(), "exists") {
+			return err
+		}
 	}
 	
 	_, err = os.Create(c.Db["dir"] + "/" + c.Db["name"])
 	if err != nil {
-		fmt.Println("Error in making cfg file, see: config.go")
-		fmt.Println(err)
+		fmt.Println("Error in making cfg file, see: config.go -", err)
+		
+		if !strings.Contains(err.Error(), "exists") {
+			return err
+		}
 	}
+	
+	return nil
 }

@@ -59,4 +59,6 @@ func init() {
 	Router.Route("wine", ":wine_glass:", Router.Wine)
 
 	Router.Route("uptime", "Current bot uptime", Router.Uptime)
+	
+	Router.Route("gridlink", "Convert griddisk paths to 'incoming' URL's", Router.GridLink)
 }

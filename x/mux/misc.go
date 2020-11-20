@@ -3,6 +3,7 @@ package mux
 import (
 	"github.com/bwmarrin/discordgo"
 	"time"
+	"strings"
 )
 
 // Chan for communicating to Glenda
@@ -79,6 +80,39 @@ func (m *Mux) Dump(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 	}
 
 	resp := dump()
+
+	ds.ChannelMessageSend(dm.ChannelID, resp)
+
+	return
+}
+
+// Rewrite griddisk paths as links
+// Given /n/griddisk/foo, /foo, foo ⇒ …/incoming/foo
+func (m *Mux) GridLink(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
+	resp := ""
+	base := "http://wiki.9gridchan.org/incoming"
+	root := "/n/griddisk"
+	
+	resp += base
+	
+	path := ctx.Fields[1]
+	
+	switch {
+	case strings.HasPrefix(path, root):
+		// Full path
+		sub := strings.TrimPrefix(path, root)
+		resp += sub
+	
+	case path[0] == '/':
+		// Root only
+		resp += path
+	
+	default:
+		// Any other case
+		resp += "/" + path
+	}
+	
+	resp += "\n"
 
 	ds.ChannelMessageSend(dm.ChannelID, resp)
 

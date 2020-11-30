@@ -54,7 +54,7 @@ func (m *Mux) Fortunes(ds *discordgo.Session, dm *discordgo.Message, ctx *Contex
 func (m *Mux) Bullshit(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 	resp := "```\n"
 	
-	out, err := exec.Command(Config.Db["bs"]).Output()
+	out, err := exec.Command(Config.Db["bullshit"]).Output()
 	if err != nil {
 		resp += "No bullshit script found."
 		goto END

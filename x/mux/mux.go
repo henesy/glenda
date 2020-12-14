@@ -153,7 +153,7 @@ func (m *Mux) OnMessageCreate(ds *discordgo.Session, mc *discordgo.MessageCreate
 				reg := regexp.MustCompile(fmt.Sprintf("<@!?(%s)>", ds.State.User.ID))
 
 				// Was the @mention the first part of the string?
-				if reg.FindStringIndex(ctx.Content)[0] == 0 {
+				if len(reg.FindStringIndex(ctx.Content)) > 0 && reg.FindStringIndex(ctx.Content)[0] == 0 {
 					ctx.HasMentionFirst = true
 				}
 

@@ -31,6 +31,8 @@ func (m *Mux) Fortunes(ds *discordgo.Session, dm *discordgo.Message, ctx *Contex
 		f = "henesy"
 	} else if strings.Contains(dm.Content, "davros") {
 		f = "davros"
+	} else if strings.Contains(dm.Content, "mao") {
+		f = "mao"
 	} else {
 		f = Config.Db["extrafortunes"]
 	}

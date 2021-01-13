@@ -1,5 +1,5 @@
 #!/bin/bash
 # Rebuild script for hosting server
 export DG_TOKEN=$HB_TOKEN
-go build; ./glenda > ./glenda.log
+go clean && go build; ./glenda 
 

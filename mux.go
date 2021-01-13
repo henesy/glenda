@@ -61,4 +61,6 @@ func init() {
 	Router.Route("uptime", "Current bot uptime", Router.Uptime)
 	
 	Router.Route("gridlink", "Convert griddisk paths to 'incoming' URL's", Router.GridLink)
+
+	Router.Route("roll", "Roll dice in the form XdY", Router.Roll)
 }

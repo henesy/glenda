@@ -52,8 +52,8 @@ func (m *Mux) Roll(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 			usage("Invalid numeric for count: " + err.Error())
 			return
 		}
-		if count <= 0 {
-			usage("Count must be > 0")
+		if count <= 0 || count > 200 {
+			usage("Count must be > 0 and <= 200")
 			return
 		}
 
@@ -118,6 +118,10 @@ func (m *Mux) Roll(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 
 		}
 		resp += "\n```\n"
+	}
+
+	if len(resp) > 2000 {
+		resp = "Error: output exceeded Discord™ 2000 character limit."
 	}
 
 	ds.ChannelMessageSend(dm.ChannelID, resp)

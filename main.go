@@ -85,7 +85,7 @@ func main() {
 	mux.RemChan = make(chan mux.Reminder, 5)
 	go mux.Reminders()
 
-	Session.UpdateStatus(0, "with #cat-v")
+	Session.UpdateGameStatus(0, "with #cat-v")
 
 	// Wait for a CTRL-C
 	log.Printf(`Now running on PID ` + sc.Itoa(os.Getpid()) + `. Press CTRL-C to exit.`)

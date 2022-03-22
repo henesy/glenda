@@ -4,7 +4,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 )
 
-// Display basic information about the bot
+// Generate a 1 time use invite
 func (m *Mux) Invite(ds *discordgo.Session, dm *discordgo.Message, ctx *Context) {
 	invite := discordgo.Invite{MaxUses: 1}
 	st, err := ds.ChannelInviteCreate(dm.ChannelID, invite)

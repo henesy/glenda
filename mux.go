@@ -24,6 +24,8 @@ func init() {
 
 	Router.Route("newuser", "Information for new users of Plan 9.", Router.Newuser)
 
+	Router.Route("invite", "Generate a single use invite", Router.Invite)
+
 	Router.Route("remindme", "Set a reminder for a given time interval ([int][hmsd] [reminder]).", Router.RemindMe)
 
 	Router.Route("man", "Link a given Plan 9 manual page (From 9front for now).", Router.Man)

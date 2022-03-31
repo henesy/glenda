@@ -59,7 +59,7 @@ func (c *Configuration) Init(s *discordgo.Session) {
 		
 		"extrafortunes":	"../sys/games/lib/fortunes",			// Unix
 		"fortunes":		"/usr/share/mirror/plan9front/lib/",	// Plan 9
-		
+		"oracledbs": "./oracledbs/",	// Vendored if you want it
 		}
 		
 	// Regularly dump the config

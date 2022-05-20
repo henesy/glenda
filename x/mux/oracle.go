@@ -33,11 +33,13 @@ func (m *Mux) Oracle(ds *discordgo.Session, dm *discordgo.Message, ctx *Context)
 		f = "faust"
 	} else if strings.Contains(dm.Content, "fortunes") {
 		f = "fortunes"
+	} else if strings.Contains(dm.Content, "commie") {
+		f = "commie"
 	}
 
 	// Linux solution
 	var args []string
-	args = append(args, "-db", path + f, "-len", "30")
+	args = append(args, "-db", path + f, "-len", "20")
 	args = append(args, prompt...)
 	//fmt.Println(args)
 	out, err := exec.Command("oracle", args...).Output()

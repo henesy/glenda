@@ -52,6 +52,7 @@ func Reminders() {
 							Config.Reminders = []Reminder{Config.Reminders[0]}
 						}
 					default:
+						i = min(i, len(Config.Reminders) - 1)
 						switch i {
 						case len(Config.Reminders) - 1:
 							// Last

@@ -18,7 +18,8 @@ const Version = "v0.1.1"
 // Session is declared in the global space so it can be easily used
 // throughout this program.
 // In this use case, there is no error that would be returned.
-var Session, _ = discordgo.New()
+var Session *discordgo.Session
+var token string
 
 // Read in all configuration options from both environment variables and
 // command line arguments.
@@ -26,9 +27,15 @@ func init() {
 
 	// Discord Authentication Token
 	// Have to prefix "Bot [Token Here]" or 401 Forbidden
-	Session.Token = os.Getenv("DG_TOKEN")
-	if Session.Token == "" {
-		flag.StringVar(&Session.Token, "t", "", "Discord Authentication Token")
+	token = os.Getenv("DG_TOKEN")
+	if token == "" {
+		flag.StringVar(&token, "t", "", "Discord Authentication Token (Bot ...)")
+	}
+
+	var err error
+	Session, err = discordgo.New(token)
+	if err != nil {
+		log.Fatal("error initiating session")
 	}
 }
 
